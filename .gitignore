@@ -57,9 +57,11 @@ typings/
 # dotenv environment variables file
 .env
 
-# Ignore public folder with webpack build output
-public/
+# Ignore dist folder with webpack build output
+dist/
 
 .DS_Store
 
 certs/
+results/
+.ret.credentials

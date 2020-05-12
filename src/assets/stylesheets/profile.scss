@@ -1,4 +1,6 @@
-.profile-entry {
+@import 'shared';
+
+:local(.profile-entry) {
   position: absolute;
   top: 0;
   left: 0;
@@ -8,138 +10,146 @@
   align-items: center;
   display: flex;
   pointer-events: auto;
+  z-index: 9;
+  background-color: var(--full-panel-background-color);
 
-  &__avatar-selector-container {
-    flex: 1;
-    position: relative;
-    margin-bottom: 0.5em;
-    width: 95%;
-    text-align: center;
+
+  a {
+    cursor: pointer;
   }
 
-  &__avatar-selector {
-    border: none;
-    width: 95%;
+  :local(.logo) {
+    width: 150px;
+    position: absolute;
+    right: 32px;
+    bottom: 32px;
+    display: none;
+    filter: drop-shadow(0 0 4px #888);
+
+    @media (min-width: 500px) {
+      display: block;
+    }
+  }
+
+  :local(.form) {
     height: 100%;
-    z-index: 1;
-    position: relative;
   }
 
-  &__form {
-    height: 100%;
-  }
-
-  &__box {
-    border-radius: 8px;
-    box-shadow: 0px 0px 30px 1px #202020;
+  :local(.box) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
+    margin-top: 32px;
     flex: 1 1 100%;
     width: 60vw;
     min-width: 300px;
     max-width: 700px;
     min-height: 200px;
-    max-height: 1000px;
+    max-height: 100vh;
+    @media (min-height: 1000px) {
+      max-height: 1000px;
+    }
     height: 90%;
 
-    &__links {
+    :local(.links) {
       display: flex;
       justify-content: center;
       width: 100%;
       margin: 16px;
 
       a {
-	margin: 0px 12px;
-	color: $light-text;
+        margin: 0px 12px;
+        color: var(--panel-subtext-link-color);
       }
     }
-
-    &--darkened {
-      background-color: $darkest-transparent;
-    }
   }
 
-  &__subtitle {
+  :local(.title) {
+    @extend %top-title;
     width: 100%;
+    color: var(--panel-text-color);
     text-align: center;
-    font-size: 1.2em;
-    color: $grey-text;
   }
 
-  &__display-name-label {
-    font-size: 1.2em;
-    margin-right: 0.5em;
+  :local(.display-name) {
+    font-size: 14pt;
+    padding: 1em;
   }
-  &__form-field-text {
-    @extend %rounded-border;
+
+  :local(.form-field-text) {
     @extend %default-font;
 
-    color: $light-text;
-    font-size: 1.2em;
-    background-color: transparent;
+    border: 1px solid var(--text-field-border-color);
+    background-color: var(--text-field-background-color);
+    border-radius: 10px;
+    font-size: 1.1em;
+    color: var(--text-field-text-color);
+    outline: none;
     line-height: 2.0em;
     padding-left: 1.25em;
     padding-right: 1.25em;
     margin: 0.5em 0;
   }
 
-  &__form-submit {
-    @extend %bottom-button;
+  :local(.form-submit) {
+    @extend %bottom-action-button;
     margin: 0;
     min-height: max-content;
+    margin-top: 16px;
   }
-}
 
-.profile-info-header {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  min-height: 80px;
-
-  &__menu-buttons {
+  :local(.preview) {
+    flex: 1;
     display: flex;
-    margin: 0 20px;
+    position: relative;
+    max-width: 300px;
+    overflow: hidden;
+  }
 
-    &__menu-button {
-      @extend %fa-icon-button;
-      margin-left: 16px;
+  :local(.choose-avatar) {
+    position: absolute;
+    width: 100%;
+    bottom: 16px;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 
-      &__icon {
-	@extend %fa-icon-button-icon;
-	background: transparent;
-	border-color: $darker-grey;
-	color: $light-grey;
-      }
+    a {
+      align-self: flex-end;
+      @extend %action-button-secondary;
     }
   }
 
-  &__icon {
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-    margin: 15px;
+  :local(.edit-avatar) {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: var(--tile-button-icon-color);
+    font-size: 12pt;
+    background: var(--tile-button-background-color);
+    border-radius: 30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    &:hover {
+      background: $action-color;
+      color: var(--tile-button-icon-hover-color);
+    }
   }
 
-  &__profile_display_name {
-    margin-left: 16px;
-    cursor: pointer;
-    font-size: 1.2em;
-    line-height: 50px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-  }
+  :local(.close) {
+    top: 32px;
+    left: 24px;
+    height: 35px;
+    position: absolute;
 
-  &__app_name {
-    font-size: 1.8em;
-    padding-right: 18px;
-    line-height: 50px;
-    white-space: nowrap;
+    button {
+      font-size: 1.6em;
+      @extend %panel-widget;
+    }
   }
 }
-

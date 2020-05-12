@@ -1,47 +1,65 @@
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import PropTypes from "prop-types";
-import MobileDetect from "mobile-detect";
 
-import MobileScreenEntryImg from "../assets/images/mobile_screen_entry.svg";
-import DesktopScreenEntryImg from "../assets/images/desktop_screen_entry.svg";
-import GenericVREntryImg from "../assets/images/generic_vr_entry.svg";
-import GearVREntryImg from "../assets/images/gearvr_entry.svg";
-import DaydreamEntyImg from "../assets/images/daydream_entry.svg";
+import MobileScreenEntryImg from "../assets/images/mobile_screen_entry.svgi";
+import DesktopScreenEntryImg from "../assets/images/desktop_screen_entry.svgi";
+import GenericVREntryImg from "../assets/images/generic_vr_entry.svgi";
+import GearVREntryImg from "../assets/images/gearvr_entry.svgi";
+import DaydreamEntryImg from "../assets/images/daydream_entry.svgi";
+import styles from "../assets/stylesheets/entry.scss";
+import { WithHoverSound } from "./wrap-with-audio";
+import cx from "classnames";
+import { InlineSVG } from "./svgi";
 
-const mobiledetect = new MobileDetect(navigator.userAgent);
-
-const EntryButton = props => (
-  <button className="entry-button" onClick={props.onClick}>
-    <img src={props.iconSrc} className="entry-button__icon" />
-    <div className="entry-button__label">
-      <div className="entry-button__label__contents">
-        <span>
-          <FormattedMessage id={props.prefixMessageId} />
-        </span>
-        <span className="entry-button--bolded">
-          <FormattedMessage id={props.mediumMessageId} />
-        </span>
-        {props.subtitle && <div className="entry-button__subtitle">{props.subtitle}</div>}
-      </div>
-    </div>
-  </button>
-);
+const EntryButton = props => {
+  return (
+    <WithHoverSound>
+      <button
+        autoFocus={props.autoFocus}
+        className={cx([{ [styles.entryButton]: true, [styles.entryButtonSecondary]: props.secondary }])}
+        onClick={props.onClick}
+      >
+        <InlineSVG src={props.iconSrc} className={styles.icon} />
+        <div className={styles.label}>
+          <div className={styles.contents}>
+            <span>
+              <FormattedMessage id={props.prefixMessageId} />
+            </span>
+            <span className={styles.bolded}>
+              <FormattedMessage id={props.mediumMessageId} />
+            </span>
+            {props.subtitle && (
+              <div className={styles.subtitle}>
+                <FormattedMessage id={props.subtitle} />
+              </div>
+            )}
+          </div>
+        </div>
+      </button>
+    </WithHoverSound>
+  );
+};
 
 EntryButton.propTypes = {
   onClick: PropTypes.func,
+  autoFocus: PropTypes.bool,
   iconSrc: PropTypes.string,
+  secondary: PropTypes.bool,
   prefixMessageId: PropTypes.string,
   mediumMessageId: PropTypes.string,
-  subtitle: PropTypes.string
+  subtitle: PropTypes.string,
+  isInHMD: PropTypes.bool
 };
+
+const isMobile = AFRAME.utils.device.isMobile() || AFRAME.utils.device.isMobileVR();
 
 export const TwoDEntryButton = props => {
   const entryButtonProps = {
     ...props,
-    iconSrc: mobiledetect.mobile() ? MobileScreenEntryImg : DesktopScreenEntryImg,
+    iconSrc: isMobile ? MobileScreenEntryImg : DesktopScreenEntryImg,
     prefixMessageId: "entry.screen-prefix",
-    mediumMessageId: mobiledetect.mobile() ? "entry.mobile-screen" : "entry.desktop-screen"
+    mediumMessageId: isMobile ? "entry.mobile-screen" : "entry.desktop-screen"
   };
 
   return <EntryButton {...entryButtonProps} />;
@@ -52,7 +70,8 @@ export const GenericEntryButton = props => {
     ...props,
     iconSrc: GenericVREntryImg,
     prefixMessageId: "entry.generic-prefix",
-    mediumMessageId: "entry.generic-medium"
+    mediumMessageId: "entry.generic-medium",
+    subtitle: isMobile ? null : "entry.generic-subtitle-desktop"
   };
 
   return <EntryButton {...entryButtonProps} />;
@@ -72,7 +91,7 @@ export const GearVREntryButton = props => {
 export const DaydreamEntryButton = props => {
   const entryButtonProps = {
     ...props,
-    iconSrc: DaydreamEntyImg,
+    iconSrc: DaydreamEntryImg,
     prefixMessageId: "entry.daydream-prefix",
     mediumMessageId: "entry.daydream-medium"
   };

@@ -1,37 +1,51 @@
-[![Build Status](https://travis-ci.org/mozilla/hubs.svg?branch=master)](https://travis-ci.org/mozilla/hubs)
+# [Mozilla Hubs](https://hubs.mozilla.com/)
 
-A prototype client demonstrating a multi-user experience in WebVR. Built with
-[A-Frame](https://github.com/aframevr/aframe/)
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0) [![Build Status](https://travis-ci.org/mozilla/hubs.svg?branch=master)](https://travis-ci.org/mozilla/hubs) [![Discord](https://img.shields.io/discord/498741086295031808)](https://discord.gg/CzAbuGu)
+
+The client-side code for [Mozilla Hubs](https://hubs.mozilla.com/), an online 3D collaboration platform that works for desktop, mobile, and VR platforms.
+
+[Learn more about Hubs](https://hubs.mozilla.com/docs/welcome.html)
 
 ## Getting Started
 
-To run the social client, run:
+If you would like to run Hubs on your own servers, check out [Hubs Cloud](https://hubs.mozilla.com/docs/hubs-cloud-intro.html).
 
-```sh
+If you would like to deploy a custom client to your existing Hubs Cloud instance please refer to [this guide](https://hubs.mozilla.com/docs/hubs-cloud-custom-clients.html).
+
+If you would like to contribute to the main fork of the Hubs client please see the [contributor guide](./CONTRIBUTING.md).
+
+If you just want to check out how Hubs works and make your own modifications continue on to our Quick Start Guide.
+
+### Quick Start
+
+[Install NodeJS](https://nodejs.org) if you haven't already. We recommend version 12 or above.
+
+Run the following commands:
+
+```bash
 git clone https://github.com/mozilla/hubs.git
-yarn install
-yarn start
+cd hubs
+npm ci
+npm run dev
 ```
 
-## Building Static Files
+Then visit https://localhost:8080 (note: HTTPS is required, you'll need to accept the warning for the self-signed SSL certificate)
 
-To bundle javascript and generate the html templates, run:
+> Note: When running the Hubs client locally, you will still connect to the development versions of our [Janus WebRTC](https://github.com/mozilla/janus-plugin-sfu) and [reticulum](https://github.com/mozilla/reticulum) servers. These servers do not allow being accessed outside of localhost. If you want to host your own Hubs servers, please check out [Hubs Cloud](https://hubs.mozilla.com/docs/hubs-cloud-intro.html).
 
-```sh
-yarn build
-```
+## Documentation
 
-## Query Params
+The Hubs documentation can be found [here](https://hubs.mozilla.com/docs).
 
-- `room` - Id of the room (an integer) that you want to join
-- `allow_multi` - Allow multiple instances off the app in the same browser session
-- `enable_screen_sharing` - Enable screen sharing
-- `accept_screen_shares` - Display screens shared by other users
-- `avatar_scale` - Scale your self!
-- `quality` - Either "low" or "high". Force assets to a certain quality level
-- `mobile` - Force mobile mode
-- `no_stats` - Disable performance stats
-- `vr_entry_type` - Either "gearvr" or "daydream". Used internally to force a VR entry type
+## Community
+
+Join us on our [Discord Server](https://discord.gg/CzAbuGu) or [follow us on Twitter](https://twitter.com/MozillaHubs).
+
+## Contributing
+
+Read our [contributor guide](./CONTRIBUTING.md) to learn how you can submit bug reports, feature requests, and pull requests.
+
+Contributors are expected to abide by the project's [Code of Conduct](./CODE_OF_CONDUCT.md) and to be respectful of the project and people working on it. 
 
 ## Additional Resources
 
@@ -41,4 +55,10 @@ yarn build
 * [Janus SFU Plugin](https://github.com/mozilla/janus-plugin-sfu) - Plugins for Janus which enables it to act as a SFU.
 * [Hubs-Ops](https://github.com/mozilla/hubs-ops) - Infrastructure as code + management tools for running necessary backend services on AWS.
 
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/mozilla/socialmr.svg?columns=all)](http://waffle.io/mozilla/socialmr)
+## Privacy
+
+Mozilla and Hubs believe that privacy is fundamental to a healthy internet. Read our [privacy policy](./PRIVACY.md) for more info.
+
+## License
+
+Hubs is licensed with the [Mozilla Public License 2.0](./LICENSE)

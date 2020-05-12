@@ -1,3 +1,4 @@
+@import 'root-vars';
 @import 'shared';
 
 @import 'loader';
@@ -8,18 +9,46 @@
 @import 'audio';
 @import 'info-dialog';
 
-.a-enter-vr {
+body {
+  background-color: var(--loading-background-color);
+}
+
+body.vr-mode-stretch {
+  a-scene {
+    .a-canvas {
+      width: 200% !important;
+    }
+  }
+}
+
+.a-enter-vr, .a-orientation-modal {
   display: none;
 }
 
-.a-canvas.a-grab-cursor:hover {
-  cursor: none;
+.grab-cursor {
+  cursor: grab;
 }
 
-.a-canvas.a-grab-cursor:active {
+.no-cursor {
   cursor: none;
 }
 
 .webxr-realities, .webxr-sessions {
-  user-select: none;
+  @extend %unselectable
+}
+
+// HACK: Deals with a performance regression in Chrome 75 where, once
+// enough elements are on the page, the Chrome "reader" functionality continually
+// scanning the page on mouse drag kills performance.
+
+a-entity {
+  display: none;
+}
+
+.svg-icon {
+  overflow: visible;
+  display: inline-block;
+  font-size: inherit;
+  vertical-align: -0.125em;
+  height: 1em;
 }

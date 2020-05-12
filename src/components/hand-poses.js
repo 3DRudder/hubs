@@ -1,3 +1,5 @@
+import { findAncestorWithComponent } from "../utils/scene-graph";
+
 const POSES = {
   open: "allOpen",
   thumbDown: "thumbDown",
@@ -11,22 +13,37 @@ const POSES = {
 
 const NETWORK_POSES = ["allOpen", "thumbDown", "indexDown", "mrpDown", "thumbsUp", "point", "allGrip", "pinch"];
 
+/**
+ * Animates between poses based on networked pose state using an animation mixer.
+ * @namespace avatar
+ * @component hand-pose
+ */
 AFRAME.registerComponent("hand-pose", {
   multiple: true,
 
   init() {
     this.pose = 0;
     this.animatePose = this.animatePose.bind(this);
-    this.mixer = this.el.components["animation-mixer"];
-    const object3DMap = this.mixer.el.object3DMap;
-    const rootObj = object3DMap.mesh || object3DMap.scene;
-    this.clipActionObject = rootObj.parent;
+    const mixerEl = findAncestorWithComponent(this.el, "animation-mixer");
     const suffix = this.id == "left" ? "_L" : "_R";
-    this.from = this.to = this.mixer.mixer.clipAction(POSES.open + suffix, this.clipActionObject);
+    this.mixer = mixerEl && mixerEl.components["animation-mixer"].mixer;
+    if (!this.mixer || !this.mixer.clipAction(POSES.open + suffix)) {
+      console.warn("Avatar does not an 'allOpen' animation, disabling hand animations");
+      this.el.removeAttribute("hand-pose");
+      return;
+    }
+    this.from = this.to = this.mixer.clipAction(POSES.open + suffix);
     this.from.play();
+    this.networkField = `${this.id}_hand_pose`;
 
     const getNetworkedAvatar = el => {
-      const networkedAvatar = el.components["networked-avatar"];
+      if (!el) {
+        window.setTimeout(() => {
+          getNetworkedAvatar(this.el);
+        }, 1000);
+        return;
+      }
+      const networkedAvatar = el.components && el.components["networked-avatar"];
       if (networkedAvatar) {
         return networkedAvatar;
       }
@@ -39,13 +56,13 @@ AFRAME.registerComponent("hand-pose", {
     if (
       !this.networkedAvatar ||
       !this.networkedAvatar.data ||
-      this.networkedAvatar.data[`${this.id}_hand_pose`] === this.pose
+      this.networkedAvatar.data[this.networkField] === this.pose
     ) {
       return;
     }
 
-    this.animatePose(NETWORK_POSES[this.pose], NETWORK_POSES[this.networkedAvatar.data[`${this.id}_hand_pose`]]);
-    this.pose = this.networkedAvatar.data[`${this.id}_hand_pose`];
+    this.animatePose(NETWORK_POSES[this.pose], NETWORK_POSES[this.networkedAvatar.data[this.networkField]]);
+    this.pose = this.networkedAvatar.data[this.networkField];
   },
 
   animatePose(prev, curr) {
@@ -54,18 +71,23 @@ AFRAME.registerComponent("hand-pose", {
 
     const duration = 0.065;
     const suffix = this.id == "left" ? "_L" : "_R";
-    this.from = this.mixer.mixer.clipAction(prev + suffix, this.clipActionObject);
-    this.to = this.mixer.mixer.clipAction(curr + suffix, this.clipActionObject);
+    this.from = this.mixer.clipAction(prev + suffix);
+    this.to = this.mixer.clipAction(curr + suffix);
 
     this.from.fadeOut(duration);
     this.to.fadeIn(duration);
     this.to.play();
     this.from.play();
 
-    this.mixer.mixer.update(0.001);
+    this.mixer.update(0.001);
   }
 });
 
+/**
+ * Sets the networked hand pose state based on hand-pose events.
+ * @namespace avatar
+ * @component hand-pose-controller
+ */
 AFRAME.registerComponent("hand-pose-controller", {
   multiple: true,
   schema: {
