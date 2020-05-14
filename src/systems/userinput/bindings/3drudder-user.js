@@ -15,7 +15,7 @@ export const controller3drudderUserBindings = addSetsToBindings({
         dest: { value: paths.actions.characterAcceleration },
         xform: xforms.compose_vec2
     },
-    {
+    /*{
       src: { 
           x: device(0).axis("rotation"), 
           y: device(0).axis("updown") 
@@ -29,11 +29,11 @@ export const controller3drudderUserBindings = addSetsToBindings({
       },
       dest: { value: paths.actions.cameraDelta },
       xform: xforms.copyVec2IfTrue
-    },
+    },*/
     {
-      src: { value: paths.actions.cameraDelta },
-      dest: { value: paths.actions.lobbyCameraDelta },
-      xform: xforms.copy
+      src: { value: device(0).axis("rotation") },
+      dest: { value: paths.actions.angularVelocity },
+      xform: xforms.scale(-0.1)
     },
   ],
 });

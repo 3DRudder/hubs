@@ -238,6 +238,9 @@ export class CharacterControllerSystem {
       const preferences = window.APP.store.state.preferences;
       const snapRotateLeft = userinput.get(paths.actions.snapRotateLeft);
       const snapRotateRight = userinput.get(paths.actions.snapRotateRight);
+      const angularVelocity = userinput.get(paths.actions.angularVelocity);
+      this.dXZ += angularVelocity;
+
       if (snapRotateLeft) {
         this.dXZ +=
           preferences.snapRotationDegrees === undefined
@@ -253,6 +256,7 @@ export class CharacterControllerSystem {
       if (snapRotateLeft || snapRotateRight) {
         this.scene.systems["hubs-systems"].soundEffectsSystem.playSoundOneShot(SOUND_SNAP_ROTATE);
       }
+
       const characterAcceleration = userinput.get(paths.actions.characterAcceleration);
       if (characterAcceleration) {
         const zCharacterAcceleration = -1 * characterAcceleration[1];
