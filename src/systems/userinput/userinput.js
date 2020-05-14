@@ -39,6 +39,9 @@ const gearVRControllerUserBindings = generate3DOFTriggerBindings(paths.device.ge
 import { resolveActionSets } from "./resolve-action-sets";
 import { GamepadDevice } from "./devices/gamepad";
 import { gamepadBindings } from "./bindings/generic-gamepad";
+import { Controller3dRudderDevice } from "./devices/3drudder";
+import { controller3drudderUserBindings } from "./bindings/3drudder-user";
+
 import { getAvailableVREntryTypes, VR_DEVICE_AVAILABILITY } from "../../utils/vr-caps-detect";
 import { hackyMobileSafariTest } from "../../utils/detect-touchscreen";
 import { ArrayBackedSet } from "./array-backed-set";
@@ -251,6 +254,8 @@ AFRAME.registerSystem("userinput", {
       this.activeDevices.add(new KeyboardDevice());
       this.activeDevices.add(new GyroDevice());
     }
+    // force 3dRudder
+    this.activeDevices.add(new Controller3dRudderDevice());
 
     this.isMobile = isMobile;
     this.isMobileVR = isMobileVR;
@@ -269,6 +274,7 @@ AFRAME.registerSystem("userinput", {
     const nonVRGamepadMappings = new Map();
     nonVRGamepadMappings.set(XboxControllerDevice, xboxControllerUserBindings);
     nonVRGamepadMappings.set(GamepadDevice, gamepadBindings);
+    nonVRGamepadMappings.set(Controller3dRudderDevice, controller3drudderUserBindings);
 
     const addExtraMappings = activeDevice => {
       if (activeDevice instanceof ViveControllerDevice && activeDevice.gamepad) {

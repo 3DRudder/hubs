@@ -218,6 +218,7 @@ module.exports = async (env, argv) => {
       Buffer: false,
       fs: "empty"
     },
+    externals: ['ws'],
     entry: {
       index: path.join(__dirname, "src", "index.js"),
       hub: path.join(__dirname, "src", "hub.js"),

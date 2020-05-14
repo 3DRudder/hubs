@@ -190,6 +190,10 @@ paths.device.gamepad = gamepadIndex => ({
   axis: axisIndex => `/device/gamepad/${gamepadIndex}/axis/${axisIndex}`
 });
 
+paths.device.drudder = drudderIndex => ({
+  axis: axisName => `/device/3dRudder/${drudderIndex}/axis/${axisName}`
+});
+
 const xbox = "/device/xbox/";
 paths.device.xbox = {
   v: name => `/vars/xbox/${name}`,
